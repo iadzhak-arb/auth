@@ -1,1 +1,5 @@
+alembic==1.18.5
+authx==1.7.1
 fastapi[standard]==0.140.8
+pwdlib[argon2]==0.3.0
+sqlmodel==0.0.39

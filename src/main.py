@@ -1,17 +1,20 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
-from src.schema import UserSignUp
+from settings import config
+from .auth import auth
+from .routes import router
+
 
 app = FastAPI()
 
-@app.get('/')
-async def root():
-    return {'message': 'Hello World'}
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=config.ALLOWED_HOSTS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
-@app.post('/signup')
-async def registration(user: UserSignUp):
-    print(user)
-    return {
-        'message': 'User created',
-        'email': user.email,
-    }
+app.include_router(router)
+auth.handle_errors(app)
