@@ -1,2 +1,5 @@
 [tool.fastapi]
-entrypoint = "src:app"
+entrypoint = "src.main:app"
+
+[tool.isort]
+skip_glob = ["src/migrations/*", ".venv/", ".gigacode/"]

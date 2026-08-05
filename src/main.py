@@ -2,11 +2,13 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from settings import config
-from .auth import auth
-from .routes import router
 
+from .error_handlers import register_error_handlers
+from .routes import auth_router, user_router
 
-app = FastAPI()
+app = FastAPI(
+    root_path='/api/auth',
+)
 
 app.add_middleware(
     CORSMiddleware,
@@ -16,5 +18,7 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-app.include_router(router)
-auth.handle_errors(app)
+
+app.include_router(auth_router)
+app.include_router(user_router)
+register_error_handlers(app)
