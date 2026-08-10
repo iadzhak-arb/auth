@@ -1,6 +1,6 @@
 # Auth Service
 
-Сервис аутентификации и авторизации на **FastAPI** с поддержкой JWT-токенов, хранящихся в cookie, и асинхронной работой с базой данных.
+Сервис аутентификации и авторизации на **FastAPI** с поддержкой JWT-токенов в httpOnly cookie и асинхронной работой с базой данных.
 
 ## 🚀 Технологии
 
@@ -29,6 +29,7 @@ pip install -r requirements.txt
 
 ```bash
 docker build -t auth-service .
+docker run -p 8000:8000 auth-service
 ```
 
 ## ⚙️ Настройка
@@ -37,18 +38,14 @@ docker build -t auth-service .
 
 | Параметр                          | Описание                      | Значение по умолчанию              |
 |-----------------------------------|-------------------------------|------------------------------------|
-| `SECRET_KEY`                      | Ключ для подписи JWT          | `secret_key` (замените на-production!) |
+| `SECRET_KEY`                      | Ключ для подписи JWT          | `secret_key` (замените на production!) |
 | `ALGORITHM`                       | Алгоритм JWT                  | `HS256`                            |
 | `ACCESS_TOKEN_EXPIRE_MINUTES`     | Время жизни access-токена     | `15` минут                         |
 | `REFRESH_TOKEN_EXPIRE_MINUTES`    | Время жизни refresh-токена    | `10080` минут (7 дней)             |
-| `DB_URL`                          | URL подключения к БД          | `sqlite+aiosqlite:///database.db`  |
+| `AUTH_DB_URL`                     | URL подключения к БД          | `sqlite+aiosqlite:///database.db`  |
 | `ALLOWED_HOSTS`                   | Разрешённые CORS- origins     | `["http://localhost:5173", ...]`   |
 
-### Генерация SECRET_KEY
-
-```bash
-openssl rand -hex 32
-```
+> ⚠️ Для production сгенерируйте новый ключ: `openssl rand -hex 32`
 
 ## 🏃 Запуск
 
@@ -84,43 +81,14 @@ alembic downgrade -1
 
 ### User
 
-| Метод    | Endpoint       | Описание                  |
-|----------|----------------|---------------------------|
-| `GET`    | `/user/me`     | Получить данные текущего пользователя |
+| Метод    | Endpoint                | Описание                              | Тело запроса                      |
+|----------|-------------------------|---------------------------------------|-----------------------------------|
+| `GET`    | `/user/me`              | Получить данные текущего пользователя | —                                 |
+| `PUT`    | `/user/me`              | Обновить данные пользователя          | `{first_name?, last_name?}`       |
+| `PUT`    | `/user/change-password` | Сменить пароль                        | `{password}`                      |
 
-### Примеры запросов
-
-**Регистрация:**
-
-```bash
-curl -X POST http://localhost:8000/api/auth/registration \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "user@example.com",
-    "password": "SecurePass123!",
-    "first_name": "Ivan",
-    "last_name": "Petrov"
-  }'
-```
-
-**Вход:**
-
-```bash
-curl -X POST http://localhost:8000/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "user@example.com",
-    "password": "SecurePass123!",
-    "remember": true
-  }'
-```
-
-**Получить данные пользователя:**
-
-```bash
-curl http://localhost:8000/api/auth/user/me \
-  -H "Cookie: access_token=...; refresh_token=..."
-```
+### Документация API
+`/docs`
 
 ## 📁 Структура проекта
 
@@ -129,7 +97,7 @@ auth/
 ├── src/
 │   ├── routes/           # API endpoints
 │   │   ├── auth.py       # Логин, регистрация, logout, refresh
-│   │   └── user.py       # Профиль пользователя
+│   │   └── user.py       # Профиль, обновление данных, смена пароля
 │   ├── models/           # SQLAlchemy модели
 │   │   ├── user.py       # Модель пользователя
 │   │   └── base.py       # Базовая модель
@@ -138,7 +106,7 @@ auth/
 │   ├── services/         # Бизнес-логика
 │   │   ├── user.py       # Сервис работы с пользователями
 │   │   ├── security.py   # Хеширование паролей
-│   │   └── password_validators.py # Валидация паролей
+│   │   └── password_validators.py  # Валидация паролей
 │   ├── auth.py           # JWT-аутентификация (AuthX)
 │   ├── database.py       # Асинхронный движок SQLAlchemy
 │   ├── dependencies.py   # FastAPI зависимости
@@ -157,7 +125,3 @@ auth/
 - JWT-токены хранятся в **httpOnly cookie**
 - Поддержка `remember me` для длительного сеанса
 - Валидация паролей с проверкой сложности
-
-## 📝 Лицензия
-
-MIT

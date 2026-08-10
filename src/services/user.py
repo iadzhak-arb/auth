@@ -74,3 +74,51 @@ class UserService:
         result = await session.execute(stmt)
         user = result.scalars().first()
         return UserPublic.model_validate(user) if user else None
+
+    @classmethod
+    async def change_data(
+            cls,
+            session: AsyncSession,
+            pk: int,
+            first_name: str | None = None,
+            last_name: str | None = None,
+    ) -> None:
+        stmt  =select(UserORM).filter_by(id=pk)
+        result = await session.execute(stmt)
+        user = result.scalars().first()
+        if first_name:
+            user.first_name = first_name
+        if last_name:
+            user.last_name = last_name
+        await session.commit()
+
+    @classmethod
+    async def change_password(
+        cls,
+        session: AsyncSession,
+        pk: int,
+        password: str
+    ) -> None:
+        stmt = select(UserORM).filter_by(id=pk)
+        result = await session.execute(stmt)
+        user = result.scalars().first()
+        if not user:
+            raise ValueError('User not found')
+        errors = {}
+        password_validation = password_validator.evaluate(
+            password,
+            context_data={
+                'email': user.email,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+            }
+        )
+        if not password_validation.valid:
+            errors['password'] = ' '.join([
+                i.message
+                for i in password_validation.issues
+            ])
+        if errors:
+            raise ValueError(errors)
+        user.hashed_password = get_password_hash(password)
+        await session.commit()

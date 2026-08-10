@@ -21,3 +21,12 @@ class UserPublic(UserBase):
     id: int
     first_name: str
     last_name: str
+
+
+class UserUpdate(BaseModel):
+    first_name: str
+    last_name: str
+
+
+class UserChangePassword(BaseModel):
+    password: str

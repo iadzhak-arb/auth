@@ -1,7 +1,9 @@
 __all__ = [
     'UserLogin',
     'UserPublic',
-    'UserRegistration'
+    'UserRegistration',
+    'UserUpdate',
+    'UserChangePassword'
 ]
 
-from .user import UserLogin, UserPublic, UserRegistration
+from .user import UserLogin, UserPublic, UserRegistration, UserUpdate, UserChangePassword

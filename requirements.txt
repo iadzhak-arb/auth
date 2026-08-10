@@ -6,4 +6,4 @@ sqlalchemy==2.0.51
 aiosqlite==0.22.1
 passguard==0.1.0
 pydantic-settings==2.14.2
-pydantic
+pydantic==2.13.4

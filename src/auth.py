@@ -7,6 +7,7 @@ from settings import config
 auth_config = AuthXConfig(
     JWT_SECRET_KEY=config.SECRET_KEY,
     JWT_TOKEN_LOCATION=['cookies'],
+    JWT_COOKIE_CSRF_PROTECT=False,
     JWT_COOKIE_HTTP_ONLY=True,
     JWT_COOKIE_SECURE=False,
     JWT_COOKIE_SAMESITE='lax',
