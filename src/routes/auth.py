@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from fastapi import APIRouter, HTTPException, Response, status
 
-from settings import config
+from ..settings import config
 
 from ..auth import auth
 from ..dependencies import SessionDep, TokenPayloadRefreshDep

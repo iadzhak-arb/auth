@@ -1,96 +1,44 @@
-# Auth Service
+# Auth service
+> Является частью платформы [Arb Scanner](https://github.com/iadzhak-arb)
 
 Сервис аутентификации и авторизации на **FastAPI** с поддержкой JWT-токенов в httpOnly cookie и асинхронной работой с базой данных.
 
-## 🚀 Технологии
+
+## Навигация
+- [Стек технологий](#стек-технологий)
+- [Возможности](#возможности)
+- [Структура проекта](#структура-проекта)
+- [Настройка](#настройка)
+- [Быстрый старт](#быстрый-старт)
+- [API Endpoints](#api-endpoints)
+- [🔒 Безопасность](#-безопасность)
+
+## Стек технологий
 
 - **FastAPI** — быстрый фреймворк для создания API
-- **SQLAlchemy 2.0** — ORM с асинхронной поддержкой
+- **SQLAlchemy** — ORM с асинхронной поддержкой
 - **AuthX** — библиотека для работы с JWT-токенами
 - **pwdlib + argon2** — хеширование паролей
 - **Alembic** — миграции базы данных
 - **SQLite** (aiosqlite) — база данных по умолчанию
 
-## 📦 Установка
 
-### Локальная разработка
+## Возможности
+- **Регистрация пользователей** — создание аккаунта с валидацией email и пароля
+- **Аутентификация** — вход/выход с сохранением JWT-токенов в httpOnly cookie
+- **JWT-авторизация** — access + refresh токены с поддержкой `remember me`
+- **Обновление токенов** — автоматический refresh access-токена через refresh-токен
+- **Управление профилем** — просмотр и обновление данных пользователя (имя, email)
+- **Смена пароля** — безопасная смена с верификацией старого пароля
+- **Валидация паролей** — проверка сложности через `pwdlib` + `argon2`
+- **Асинхронная работа с БД** — SQLAlchemy (SQLite/PostgreSQL через aiosqlite)
+- **Alembic миграции** — автоматическое управление схемой БД
+- **CORS поддержка** — настройка разрешённых origins
+- **Обработка ошибок** — централизованная обработка через `error_handlers.py`
+- **Зависимости FastAPI** — внедрение зависимостей для чистого кода
 
-```bash
-# Создайте виртуальное окружение
-python -m venv .venv
-source .venv/bin/activate  # Linux/macOS
-# .venv\Scripts\activate   # Windows
 
-# Установите зависимости
-pip install -r requirements.txt
-```
-
-### Docker
-
-```bash
-docker build -t auth-service .
-docker run -p 8000:8000 auth-service
-```
-
-## ⚙️ Настройка
-
-Конфигурация находится в `settings.py`. Основные параметры:
-
-| Параметр                          | Описание                      | Значение по умолчанию              |
-|-----------------------------------|-------------------------------|------------------------------------|
-| `SECRET_KEY`                      | Ключ для подписи JWT          | `secret_key` (замените на production!) |
-| `ALGORITHM`                       | Алгоритм JWT                  | `HS256`                            |
-| `ACCESS_TOKEN_EXPIRE_MINUTES`     | Время жизни access-токена     | `15` минут                         |
-| `REFRESH_TOKEN_EXPIRE_MINUTES`    | Время жизни refresh-токена    | `10080` минут (7 дней)             |
-| `AUTH_DB_URL`                     | URL подключения к БД          | `sqlite+aiosqlite:///database.db`  |
-| `ALLOWED_HOSTS`                   | Разрешённые CORS- origins     | `["http://localhost:5173", ...]`   |
-
-> ⚠️ Для production сгенерируйте новый ключ: `openssl rand -hex 32`
-
-## 🏃 Запуск
-
-```bash
-uvicorn src.main:app --reload --host 0.0.0.0 --port 8000
-```
-
-## 🗄️ Миграции
-
-```bash
-# Создание новой миграции
-alembic revision --autogenerate -m "description"
-
-# Применение миграций
-alembic upgrade head
-
-# Откат миграции
-alembic downgrade -1
-```
-
-## 📡 API Endpoints
-
-Все endpoints находятся по пути `/api/auth`.
-
-### Auth
-
-| Метод    | Endpoint       | Описание                  | Тело запроса              |
-|----------|----------------|---------------------------|---------------------------|
-| `POST`   | `/login`       | Вход в систему            | `{email, password, remember?}` |
-| `POST`   | `/registration`| Регистрация нового пользователя | `{email, password, first_name?, last_name?}` |
-| `POST`   | `/logout`      | Выход из системы          | —                         |
-| `GET`    | `/refresh`     | Обновление токенов        | —                         |
-
-### User
-
-| Метод    | Endpoint                | Описание                              | Тело запроса                      |
-|----------|-------------------------|---------------------------------------|-----------------------------------|
-| `GET`    | `/user/me`              | Получить данные текущего пользователя | —                                 |
-| `PUT`    | `/user/me`              | Обновить данные пользователя          | `{first_name?, last_name?}`       |
-| `PUT`    | `/user/change-password` | Сменить пароль                        | `{password}`                      |
-
-### Документация API
-`/docs`
-
-## 📁 Структура проекта
+## Структура проекта
 
 ```
 auth/
@@ -118,6 +66,77 @@ auth/
 ├── Dockerfile             # Сборка Docker
 └── alembic.ini            # Конфигурация Alembic
 ```
+
+
+## Настройка
+
+Конфигурация находится в `settings.py`. Основные параметры:
+
+| Параметр                          | Описание                      | Значение по умолчанию              |
+|-----------------------------------|-------------------------------|------------------------------------|
+| `SECRET_KEY`                      | Ключ для подписи JWT          | `secret_key` (замените на production!) |
+| `ALGORITHM`                       | Алгоритм JWT                  | `HS256`                            |
+| `ACCESS_TOKEN_EXPIRE_MINUTES`     | Время жизни access-токена     | `15` минут                         |
+| `REFRESH_TOKEN_EXPIRE_MINUTES`    | Время жизни refresh-токена    | `10080` минут (7 дней)             |
+| `AUTH_DB_URL`                     | URL подключения к БД          | `sqlite+aiosqlite:///database.db`  |
+| `ALLOWED_HOSTS`                   | Разрешённые CORS- origins     | `["http://localhost:5173", ...]`   |
+
+
+
+## Быстрый старт
+
+### 1. Установка
+
+Настроить окружение
+```bash
+# Создайте виртуальное окружение
+python -m venv .venv
+source .venv/bin/activate  # Linux/macOS
+# .venv\Scripts\activate   # Windows
+
+# Установите зависимости
+pip install -r requirements.txt
+```
+
+Выполнить миграции
+```bash
+alembic upgrade head
+```
+
+
+### 2. Запуск
+> Перед запуском необходимо настроить переменные окружения.
+
+REST API
+```bash
+uvicorn src.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+
+
+## API Endpoints
+
+Документация API (Swagger): `/api/auth/docs`
+
+### Auth
+
+| Метод    | Endpoint       | Описание                  | Тело запроса              |
+|----------|----------------|---------------------------|---------------------------|
+| `POST`   | `/api/auth/login`       | Вход в систему            | `{email, password, remember?}` |
+| `POST`   | `/api/auth/registration`| Регистрация нового пользователя | `{email, password, first_name?, last_name?}` |
+| `POST`   | `/api/auth/logout`      | Выход из системы          | —                         |
+| `GET`    | `/api/auth/refresh`     | Обновление токенов        | —                         |
+
+### User
+
+| Метод    | Endpoint                | Описание                              | Тело запроса                      |
+|----------|-------------------------|---------------------------------------|-----------------------------------|
+| `GET`    | `/api/auth/user/me`              | Получить данные текущего пользователя | —                                 |
+| `PUT`    | `/api/auth/user/me`              | Обновить данные пользователя          | `{first_name?, last_name?}`       |
+| `PUT`    | `/api/auth/user/change-password` | Сменить пароль                        | `{password}`                      |
+
+
+
 
 ## 🔒 Безопасность
 

@@ -16,6 +16,7 @@ class Config(BaseSettings):
     ALGORITHM: str = 'HS256'
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
     REFRESH_TOKEN_EXPIRE_MINUTES: int = 10080
+    JWT_COOKIE_SECURE: bool = False
 
     # DB
     DB_URL: str = Field('sqlite+aiosqlite:///database.db', alias='AUTH_DB_URL')
