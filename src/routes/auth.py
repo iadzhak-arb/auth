@@ -2,12 +2,11 @@ from datetime import timedelta
 
 from fastapi import APIRouter, HTTPException, Response, status
 
-from ..settings import config
-
 from ..auth import auth
 from ..dependencies import SessionDep, TokenPayloadRefreshDep
 from ..schemas import UserLogin, UserPublic, UserRegistration
 from ..services import UserService
+from ..settings import config
 
 router = APIRouter(tags=["auth"])
 

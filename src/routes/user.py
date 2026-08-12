@@ -1,16 +1,14 @@
-from typing import Annotated
-
-from fastapi import APIRouter, status, Body, HTTPException
+from fastapi import APIRouter, HTTPException, status
 
 from ..dependencies import SessionDep, TokenPayloadDep
-from ..schemas import UserPublic, UserUpdate, UserChangePassword
+from ..schemas import UserChangePassword, UserPublic, UserUpdate
 from ..services import UserService
 
 router = APIRouter(prefix="/user", tags=["user"])
 
 
 @router.get('/me')
-async def me(
+async def me_get(
         session: SessionDep,
         payload: TokenPayloadDep
 ) -> UserPublic | None:
@@ -19,7 +17,7 @@ async def me(
 
 
 @router.put('/me')
-async def me(
+async def me_put(
         session: SessionDep,
         payload: TokenPayloadDep,
         data: UserUpdate,

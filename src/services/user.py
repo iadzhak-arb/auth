@@ -83,7 +83,7 @@ class UserService:
             first_name: str | None = None,
             last_name: str | None = None,
     ) -> None:
-        stmt  =select(UserORM).filter_by(id=pk)
+        stmt = select(UserORM).filter_by(id=pk)
         result = await session.execute(stmt)
         user = result.scalars().first()
         if first_name:
