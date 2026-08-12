@@ -105,7 +105,7 @@ alembic upgrade head
 
 REST API
 ```bash
-uvicorn src.main:app --reload --host 0.0.0.0 --port 8000
+fastapi dev
 ```
 
 
