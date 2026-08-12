@@ -1,7 +1,14 @@
 # Auth service
+[![CI/CD Pipline](https://github.com/iadzhak-arb/auth/actions/workflows/main.yml/badge.svg)](https://github.com/iadzhak-arb/auth/actions)
 > Является частью платформы [Arb Scanner](https://github.com/iadzhak-arb)
 
 Сервис аутентификации и авторизации на **FastAPI** с поддержкой JWT-токенов в httpOnly cookie и асинхронной работой с базой данных.
+
+## CI/CD
+
+При каждом `push` и `pull_request` в ветку `main` GitHub Actions запускает пайплайн:
+- **Линтинг и проверка типов:** flake8
+- **Сборка и публикация Docker-образа:** успешный пайплайн публикует образ в Docker Hub [iadzhak/arb-auth](https://hub.docker.com/repository/docker/iadzhak/arb-auth)
 
 
 ## Навигация
