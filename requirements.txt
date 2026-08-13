@@ -1,5 +1,6 @@
 alembic==1.18.5
 authx==1.7.1
+asyncpg==0.31.0
 fastapi[standard]==0.140.8
 pwdlib[argon2]==0.3.0
 sqlalchemy==2.0.51

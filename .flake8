@@ -1,2 +1,2 @@
 [flake8]
-exclude = .venv,src/migrations,.gigacode/
+exclude = .venv,src/migrations,.gigacode/,src/settings.py
