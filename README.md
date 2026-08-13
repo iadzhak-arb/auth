@@ -73,16 +73,24 @@ auth/
 
 ## Настройка
 
-Конфигурация находится в `settings.py`. Основные параметры:
+Конфигурация находится в `src/settings.py`.
+Переменные окружения:
 
-| Параметр                          | Описание                      | Значение по умолчанию              |
-|-----------------------------------|-------------------------------|------------------------------------|
-| `SECRET_KEY`                      | Ключ для подписи JWT          | `secret_key` (замените на production!) |
-| `ALGORITHM`                       | Алгоритм JWT                  | `HS256`                            |
-| `ACCESS_TOKEN_EXPIRE_MINUTES`     | Время жизни access-токена     | `15` минут                         |
-| `REFRESH_TOKEN_EXPIRE_MINUTES`    | Время жизни refresh-токена    | `10080` минут (7 дней)             |
-| `AUTH_DB_URL`                     | URL подключения к БД          | `sqlite+aiosqlite:///database.db`  |
-| `ALLOWED_HOSTS`                   | Разрешённые CORS- origins     | `["http://localhost:5173", ...]`   |
+| Параметр                          | Описание                      | Значение по умолчанию                                                                                                     |
+|-----------------------------------|-------------------------------|---------------------------------------------------------------------------------------------------------------------------|
+| `ALLOWED_HOSTS`                   | Разрешённые CORS-origins      | `["http://localhost:5173", "http://127.0.0.1:8001", "http://localhost:8001", "http://localhost", "http://192.168.0.100"]` |
+| `SECRET_KEY`                      | Ключ для подписи JWT          | `secret_key`                                                                                                              |
+| `ALGORITHM`                       | Алгоритм JWT                  | `HS256`                                                                                                                   |
+| `ACCESS_TOKEN_EXPIRE_MINUTES`     | Время жизни access-токена     | `15` (минут)                                                                                                              |
+| `REFRESH_TOKEN_EXPIRE_MINUTES`    | Время жизни refresh-токена    | `10080` (минут = 7 дней)                                                                                                  |
+| `JWT_COOKIE_SECURE`               | Secure-флаг для cookie        | `False`                                                                                                                   |
+| `AUTH_DB_TYPE`                         | Тип базы данных               | `sqlite` (`sqlite` / `postgres`)                                                                                          |
+| `AUTH_SQLITE_PATH`                     | Путь к SQLite БД              | `database.db`                                                                                                             |
+| `AUTH_DB_USER`                         | Имя пользователя PostgreSQL   | `postgres`                                                                                                                |
+| `AUTH_DB_PASS`                         | Пароль PostgreSQL             | `postgres`                                                                                                                |
+| `AUTH_DB_HOST`                         | Хост PostgreSQL               | `postgres`                                                                                                                |
+| `AUTH_DB_PORT`                         | Порт PostgreSQL               | `5432`                                                                                                                    |
+| `AUTH_DB_NAME`                         | Имя БД PostgreSQL             | `postgres`                                                                                                                |
 
 
 
